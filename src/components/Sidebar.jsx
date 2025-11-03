@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   LayoutDashboard,
@@ -10,15 +10,12 @@ import {
   Calendar,
   DollarSign,
   Settings,
-  ChevronDown,
-  ChevronRight,
   Award,
   MessageSquare,
   BarChart3,
   Clock,
   Video,
   Edit3,
-  Trash2,
   Plus
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
@@ -28,183 +25,44 @@ const Sidebar = ({ isOpen, onClose }) => {
   const { isDark, currentTheme } = useTheme()
   const { user } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
 
   const menuItems = {
     admin: [
-      {
-        title: 'Dashboard',
-        icon: LayoutDashboard,
-        path: '/admin/dashboard',
-        description: 'Overview and analytics'
-      },
-      {
-        title: 'Manage Users',
-        icon: Users,
-        path: '/admin/users',
-        description: 'Add, edit, delete users'
-      },
-      {
-        title: 'Classes',
-        icon: GraduationCap,
-        path: '/admin/classes',
-        description: 'Manage classes and subjects'
-      },
-      {
-        title: 'Exams',
-        icon: FileText,
-        path: '/admin/exams',
-        description: 'Exam management'
-      },
-      {
-        title: 'Attendance',
-        icon: Calendar,
-        path: '/admin/attendance',
-        description: 'Attendance reports'
-      },
-      {
-        title: 'Finance',
-        icon: DollarSign,
-        path: '/admin/finance',
-        description: 'Fee management'
-      },
-      {
-        title: 'Reports',
-        icon: BarChart3,
-        path: '/admin/reports',
-        description: 'Analytics and reports'
-      },
-      {
-        title: 'Settings',
-        icon: Settings,
-        path: '/admin/settings',
-        description: 'System settings'
-      }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard', description: 'Overview and analytics' },
+      { title: 'Manage Users', icon: Users, path: '/admin/users', description: 'Add, edit, delete users' },
+      { title: 'Classes', icon: GraduationCap, path: '/admin/classes', description: 'Manage classes and subjects' },
+      { title: 'Exams', icon: FileText, path: '/admin/exams', description: 'Exam management' },
+      { title: 'Attendance', icon: Calendar, path: '/admin/attendance', description: 'Attendance reports' },
+      { title: 'Finance', icon: DollarSign, path: '/admin/finance', description: 'Fee management' },
+      { title: 'Reports', icon: BarChart3, path: '/admin/reports', description: 'Analytics and reports' },
+      { title: 'Settings', icon: Settings, path: '/admin/settings', description: 'System settings' }
     ],
     teacher: [
-      {
-        title: 'Dashboard',
-        icon: LayoutDashboard,
-        path: '/teacher/dashboard',
-        description: 'Overview and schedule'
-      },
-      {
-        title: 'My Classes',
-        icon: GraduationCap,
-        path: '/teacher/classes',
-        description: 'Manage your classes'
-      },
-      {
-        title: 'Create Exam',
-        icon: Plus,
-        path: '/teacher/exams',
-        description: 'Create new exams'
-      },
-      {
-        title: 'Assignments',
-        icon: Edit3,
-        path: '/teacher/assignments',
-        description: 'Manage assignments'
-      },
-      {
-        title: 'Attendance',
-        icon: Calendar,
-        path: '/teacher/attendance',
-        description: 'Mark attendance'
-      },
-      {
-        title: 'Online Classes',
-        icon: Video,
-        path: '/teacher/online-classes',
-        description: 'Schedule online classes'
-      },
-      {
-        title: 'Messages',
-        icon: MessageSquare,
-        path: '/teacher/messages',
-        description: 'Communicate with students'
-      }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/teacher/dashboard', description: 'Overview and schedule' },
+      { title: 'My Classes', icon: GraduationCap, path: '/teacher/classes', description: 'Manage your classes' },
+      { title: 'Create Exam', icon: Plus, path: '/teacher/exams', description: 'Create new exams' },
+      { title: 'Assignments', icon: Edit3, path: '/teacher/assignments', description: 'Manage assignments' },
+      { title: 'Attendance', icon: Calendar, path: '/teacher/attendance', description: 'Mark attendance' },
+      { title: 'Online Classes', icon: Video, path: '/teacher/online-classes', description: 'Schedule online classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/teacher/messages', description: 'Communicate with students' }
     ],
     student: [
-      {
-        title: 'Dashboard',
-        icon: LayoutDashboard,
-        path: '/student/dashboard',
-        description: 'Overview and updates'
-      },
-      {
-        title: 'My Classes',
-        icon: GraduationCap,
-        path: '/student/classes',
-        description: 'View enrolled classes'
-      },
-      {
-        title: 'Exams',
-        icon: FileText,
-        path: '/student/exams',
-        description: 'Take exams'
-      },
-      {
-        title: 'Assignments',
-        icon: Edit3,
-        path: '/student/assignments',
-        description: 'View and submit assignments'
-      },
-      {
-        title: 'Attendance',
-        icon: Calendar,
-        path: '/student/attendance',
-        description: 'View attendance record'
-      },
-      {
-        title: 'Results',
-        icon: Award,
-        path: '/student/results',
-        description: 'View grades and results'
-      },
-      {
-        title: 'Online Classes',
-        icon: Video,
-        path: '/student/online-classes',
-        description: 'Join online classes'
-      },
-      {
-        title: 'Messages',
-        icon: MessageSquare,
-        path: '/student/messages',
-        description: 'Communicate with teachers'
-      }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard', description: 'Overview and updates' },
+      { title: 'My Classes', icon: GraduationCap, path: '/student/classes', description: 'View enrolled classes' },
+      { title: 'Exams', icon: FileText, path: '/student/exams', description: 'Take exams' },
+      { title: 'Assignments', icon: Edit3, path: '/student/assignments', description: 'View and submit assignments' },
+      { title: 'Attendance', icon: Calendar, path: '/student/attendance', description: 'View attendance record' },
+      { title: 'Results', icon: Award, path: '/student/results', description: 'View grades and results' },
+      { title: 'Online Classes', icon: Video, path: '/student/online-classes', description: 'Join online classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/student/messages', description: 'Communicate with teachers' }
     ],
     accountant: [
-      {
-        title: 'Dashboard',
-        icon: LayoutDashboard,
-        path: '/accountant/dashboard',
-        description: 'Financial overview'
-      },
-      {
-        title: 'Fee Management',
-        icon: DollarSign,
-        path: '/accountant/payments',
-        description: 'Manage student fees'
-      },
-      {
-        title: 'Invoices',
-        icon: FileText,
-        path: '/accountant/invoices',
-        description: 'Generate and manage invoices'
-      },
-      {
-        title: 'Reports',
-        icon: BarChart3,
-        path: '/accountant/reports',
-        description: 'Financial reports'
-      },
-      {
-        title: 'Settings',
-        icon: Settings,
-        path: '/accountant/settings',
-        description: 'Account settings'
-      }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/accountant/dashboard', description: 'Financial overview' },
+      { title: 'Fee Management', icon: DollarSign, path: '/accountant/payments', description: 'Manage student fees' },
+      { title: 'Invoices', icon: FileText, path: '/accountant/invoices', description: 'Generate and manage invoices' },
+      { title: 'Reports', icon: BarChart3, path: '/accountant/reports', description: 'Financial reports' },
+      { title: 'Settings', icon: Settings, path: '/accountant/settings', description: 'Account settings' }
     ]
   }
 
@@ -253,11 +111,15 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar */}
+      {/* 
+        নিচের লাইনে z-30 কে z-50 করা হয়েছে। 
+        এটাই মূল সমাধান।
+      */}
       <motion.aside
         variants={sidebarVariants}
         initial="closed"
         animate={isOpen ? "open" : "closed"}
-        className={`fixed top-16 left-0 bottom-0 w-72 ${isDark ? 'glass-dark border-gray-700/30' : 'glass border-white/20'} border-r z-30 overflow-y-auto`}
+        className={`fixed top-16 left-0 bottom-0 w-72 ${isDark ? 'glass-dark border-gray-700/30' : 'glass border-white/20'} border-r z-50 overflow-y-auto`}
       >
         <div className="p-4">
           {/* User Info */}
@@ -355,8 +217,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                   whileTap={{ scale: 0.98 }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} text-white shadow-lg`}
                   onClick={() => {
-                    // Navigate to create exam
-                    window.location.href = '/teacher/exams'
+                    navigate('/teacher/exams')
+                    onClose()
                   }}
                 >
                   <Plus className="w-5 h-5" />
@@ -370,8 +232,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                   whileTap={{ scale: 0.98 }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800' : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'} text-white shadow-lg`}
                   onClick={() => {
-                    // Navigate to available exams
-                    window.location.href = '/student/exams'
+                    navigate('/student/exams')
+                    onClose()
                   }}
                 >
                   <Clock className="w-5 h-5" />
