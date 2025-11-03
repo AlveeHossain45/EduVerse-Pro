@@ -93,9 +93,10 @@ const Sidebar = ({ isOpen, onClose }) => {
       opacity: 1,
       x: 0,
       transition: {
-        delay: i * 0.1,
+        delay: i * 0.05,
         type: "spring",
-        stiffness: 300
+        stiffness: 300,
+        damping: 25
       }
     })
   }
@@ -111,10 +112,6 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       {/* Sidebar */}
-      {/* 
-        নিচের লাইনে z-30 কে z-50 করা হয়েছে। 
-        এটাই মূল সমাধান।
-      */}
       <motion.aside
         variants={sidebarVariants}
         initial="closed"
@@ -154,50 +151,28 @@ const Sidebar = ({ isOpen, onClose }) => {
                   variants={itemVariants}
                   initial="hidden"
                   animate="visible"
+                  whileHover={{ scale: 1.02 }}
                 >
                   <Link
                     to={item.path}
                     onClick={onClose}
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-                      ${isActive 
-                        ? isDark 
-                          ? 'sidebar-link-active-dark shadow-lg' 
-                          : 'sidebar-link-active shadow-lg'
-                        : isDark 
-                          ? 'sidebar-link-dark' 
-                          : 'sidebar-link'
+                      ${isActive
+                        ? `bg-gradient-to-r ${currentTheme.primary} text-white shadow-lg`
+                        : isDark
+                          ? 'text-gray-300 hover:bg-gray-700/30'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }
-                      ${isDark ? 'text-white' : 'text-gray-700'}
                     `}
                   >
-                    <div className={`
-                      p-2 rounded-lg transition-all duration-200
-                      ${isActive 
-                        ? `bg-gradient-to-r ${currentTheme.primary} text-white shadow-md` 
-                        : isDark 
-                          ? 'bg-gray-700/30 text-gray-400 group-hover:bg-gray-700/50 group-hover:text-white' 
-                          : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-                      }
-                    `}>
-                      <Icon className="w-5 h-5" />
-                    </div>
+                    <Icon className={`w-5 h-5 transition-colors duration-200 ${isActive ? 'text-white' : (isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-500 group-hover:text-gray-700')}`} />
                     
                     <div className="flex-1">
-                      <p className={`font-medium ${isActive ? 'text-white' : ''}`}>
+                      <p className={`font-medium text-sm transition-colors duration-200 ${isActive ? 'text-white' : (isDark ? 'text-white' : 'text-gray-900')}`}>
                         {item.title}
                       </p>
-                      <p className={`text-xs ${isActive ? 'text-white/80' : isDark ? 'text-gray-500' : 'text-gray-500'}`}>
-                        {item.description}
-                      </p>
                     </div>
-
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className={`w-1 h-8 rounded-full bg-gradient-to-r ${currentTheme.primary}`}
-                      />
-                    )}
                   </Link>
                 </motion.div>
               )
