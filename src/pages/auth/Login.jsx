@@ -205,24 +205,24 @@ const Login = () => {
         </div>
 
         <div className="relative p-6 sm:p-8">
-          {/* Logo - Smaller Size */}
+          {/* Logo - Larger Size with More Space */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-6"
+            className="text-center mb-8 sm:mb-12"
           >
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="inline-block mb-3"
+              className="inline-block mb-4 sm:mb-6"
             >
-              <Logo size="medium" />
+              <Logo size="xl" />
             </motion.div>
             <motion.h1 
-              className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}
+              className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-3 sm:mb-4`}
             >
               Welcome to{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
                 EduVersePro
               </span>
             </motion.h1>
@@ -233,7 +233,7 @@ const Login = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  className={`text-lg sm:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
                 >
                   Choose your portal to continue
                 </motion.p>
@@ -243,7 +243,7 @@ const Login = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                  className={`text-lg sm:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
                 >
                   Sign in to <span className="font-semibold">{selectedPortal.title}</span> Portal
                 </motion.p>
@@ -252,17 +252,17 @@ const Login = () => {
           </motion.div>
 
           {/* Main Content Area - Fixed Height */}
-          <div className="relative min-h-[400px] flex items-center justify-center">
+          <div className="relative min-h-[450px] flex items-center justify-center">
             <AnimatePresence mode="wait">
               {!selectedPortal ? (
-                /* Portals Grid - Compact 2x2 Layout */
+                /* Portals Grid - Larger Cards with Better Spacing */
                 <motion.div
                   key="portals-grid"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="grid grid-cols-2 gap-4 w-full max-w-2xl mx-auto"
+                  className="grid grid-cols-2 gap-6 w-full max-w-3xl mx-auto"
                 >
                   {portals.map((portal, index) => {
                     const IconComponent = portal.icon
@@ -272,8 +272,8 @@ const Login = () => {
                         variants={itemVariants}
                         onClick={() => handlePortalSelect(portal)}
                         whileHover={{ 
-                          scale: 1.03, 
-                          y: -2,
+                          scale: 1.05, 
+                          y: -4,
                           transition: { 
                             type: "spring",
                             stiffness: 400,
@@ -281,77 +281,104 @@ const Login = () => {
                           }
                         }}
                         whileTap={{ scale: 0.98 }}
-                        className={`p-4 rounded-2xl backdrop-blur-lg border-2 text-left transition-all duration-300 group relative overflow-hidden ${
+                        className={`p-6 rounded-2xl backdrop-blur-lg border-2 text-left transition-all duration-300 group relative overflow-hidden ${
                           isDark 
                             ? 'glass-card-dark border-gray-700/40 bg-gray-800/40 hover:border-gray-600/50' 
                             : 'glass-card-light border-white/20 bg-white/50 hover:border-white/40'
-                        } shadow-lg hover:shadow-xl h-28`}
+                        } shadow-lg hover:shadow-xl h-36 sm:h-40`}
                       >
                         {/* Hover Gradient Background */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${portal.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                         
                         {/* Content Container */}
-                        <div className="relative z-10 flex items-start gap-3 h-full">
-                          {/* Icon */}
-                          <div className={`p-2 rounded-xl bg-gradient-to-r ${portal.color} flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                            <IconComponent className="w-4 h-4 text-white" />
-                          </div>
-                          
-                          {/* Text Content */}
-                          <div className="flex-1 min-w-0">
-                            <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'} line-clamp-1`}>
+                        <div className="relative z-10 flex flex-col h-full">
+                          {/* Icon and Title Row */}
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className={`p-3 rounded-xl bg-gradient-to-r ${portal.color} flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                              <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                            </div>
+                            <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} line-clamp-1`}>
                               {portal.title}
                             </h3>
-                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} line-clamp-2 leading-tight mb-2`}>
-                              {portal.description}
-                            </p>
-                            
-                            {/* CTA Arrow */}
-                            <div className="flex items-center gap-1 text-xs font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                              <span>Access</span>
+                          </div>
+                          
+                          {/* Description */}
+                          <p className={`text-sm sm:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'} line-clamp-2 leading-relaxed flex-1 mb-4`}>
+                            {portal.description}
+                          </p>
+                          
+                          {/* CTA Arrow */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-sm sm:text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                              <span>Access Portal</span>
                               <motion.div
-                                animate={{ x: [0, 3, 0] }}
+                                animate={{ x: [0, 4, 0] }}
                                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                                className="group-hover:translate-x-0.5 transition-transform duration-300"
+                                className="group-hover:translate-x-1 transition-transform duration-300"
                               >
                                 →
                               </motion.div>
                             </div>
                           </div>
                         </div>
+
+                        {/* Floating Particles */}
+                        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                          {[...Array(3)].map((_, i) => (
+                            <motion.div
+                              key={i}
+                              className={`absolute rounded-full ${isDark ? 'bg-white/10' : 'bg-white/30'}`}
+                              style={{
+                                width: Math.random() * 8 + 4,
+                                height: Math.random() * 8 + 4,
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                              }}
+                              animate={{
+                                y: [0, -15, 0],
+                                opacity: [0, 1, 0],
+                              }}
+                              transition={{
+                                duration: Math.random() * 3 + 2,
+                                repeat: Infinity,
+                                delay: Math.random() * 2,
+                              }}
+                            />
+                          ))}
+                        </div>
                       </motion.button>
                     )
                   })}
                 </motion.div>
               ) : (
-                /* Login Form - Same Position */
+                /* Login Form - Same Position but Larger */
                 <motion.div
                   key="login-form"
                   variants={formVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="w-full max-w-sm mx-auto"
+                  className="w-full max-w-md mx-auto"
                 >
-                  <div className={`relative p-6 rounded-2xl backdrop-blur-lg border-2 ${
+                  <div className={`relative p-8 rounded-3xl backdrop-blur-xl border-2 ${
                     isDark 
                       ? 'glass-card-dark border-gray-700/40 bg-gray-800/40' 
                       : 'glass-card-light border-white/20 bg-white/50'
-                  } shadow-lg`}>
+                  } shadow-xl`}>
                     
                     {/* Back Button */}
                     <motion.button
                       onClick={handleBackToPortals}
-                      whileHover={{ scale: 1.02, x: -1 }}
+                      whileHover={{ scale: 1.02, x: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`flex items-center gap-2 mb-6 p-2 rounded-xl transition-all duration-200 ${
+                      className={`flex items-center gap-3 mb-8 p-3 rounded-xl transition-all duration-200 ${
                         isDark 
                           ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50' 
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
                       }`}
                     >
-                      <ArrowLeft className="w-4 h-4" />
-                      <span className="text-sm font-medium">Back to Portals</span>
+                      <ArrowLeft className="w-5 h-5" />
+                      <span className="text-base font-medium">Back to Portals</span>
                     </motion.button>
 
                     {/* Portal Header */}
@@ -359,17 +386,17 @@ const Login = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="flex items-center gap-3 mb-6"
+                      className="flex items-center gap-4 mb-8"
                     >
-                      <div className={`p-2 rounded-lg bg-gradient-to-r ${selectedPortal.color}`}>
-                        <selectedPortal.icon className="w-5 h-5 text-white" />
+                      <div className={`p-4 rounded-2xl bg-gradient-to-r ${selectedPortal.color} shadow-lg`}>
+                        <selectedPortal.icon className="w-8 h-8 text-white" />
                       </div>
                       <div>
-                        <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
+                        <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>
                           {selectedPortal.title}
                         </h2>
-                        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          Sign in to continue
+                        <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          Welcome back! Sign in to continue
                         </p>
                       </div>
                     </motion.div>
@@ -381,14 +408,14 @@ const Login = () => {
                           initial={{ opacity: 0, y: -5 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -5 }}
-                          className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
+                          className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${
                             isDark 
                               ? 'bg-red-900/30 border border-red-800/50' 
                               : 'bg-red-50 border border-red-200'
                           }`}
                         >
-                          <Sparkles className="w-4 h-4 text-red-500 flex-shrink-0" />
-                          <p className={`text-xs ${isDark ? 'text-red-300' : 'text-red-600'}`}>
+                          <Sparkles className="w-5 h-5 text-red-500 flex-shrink-0" />
+                          <p className={`text-sm ${isDark ? 'text-red-300' : 'text-red-600'}`}>
                             {error}
                           </p>
                         </motion.div>
@@ -398,20 +425,20 @@ const Login = () => {
                     {/* Login Form */}
                     <motion.form
                       onSubmit={handleSubmit}
-                      className="space-y-4"
+                      className="space-y-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
                       {/* Email Field */}
                       <div>
-                        <label className={`block text-xs font-semibold ${
+                        <label className={`block text-base font-semibold ${
                           isDark ? 'text-gray-300' : 'text-gray-700'
-                        } mb-2`}>
+                        } mb-3`}>
                           Email Address
                         </label>
                         <motion.div whileFocus={{ scale: 1.01 }} className="relative">
-                          <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+                          <Mail className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
                             isDark ? 'text-gray-400' : 'text-gray-500'
                           }`} />
                           <input
@@ -419,11 +446,11 @@ const Login = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className={`w-full pl-10 pr-4 py-3 rounded-xl transition-all duration-200 text-sm ${
+                            className={`w-full pl-12 pr-4 py-4 rounded-xl transition-all duration-200 text-base ${
                               isDark 
-                                ? 'bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/30' 
-                                : 'bg-white/70 border border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-1 focus:ring-blue-400/50 focus:border-blue-400/30'
-                            } focus:shadow-md`}
+                                ? 'bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/30' 
+                                : 'bg-white/70 border border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/30'
+                            } focus:shadow-lg`}
                             required
                           />
                         </motion.div>
@@ -431,13 +458,13 @@ const Login = () => {
 
                       {/* Password Field */}
                       <div>
-                        <label className={`block text-xs font-semibold ${
+                        <label className={`block text-base font-semibold ${
                           isDark ? 'text-gray-300' : 'text-gray-700'
-                        } mb-2`}>
+                        } mb-3`}>
                           Password
                         </label>
                         <motion.div whileFocus={{ scale: 1.01 }} className="relative">
-                          <Lock className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+                          <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
                             isDark ? 'text-gray-400' : 'text-gray-500'
                           }`} />
                           <input
@@ -445,11 +472,11 @@ const Login = () => {
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
-                            className={`w-full pl-10 pr-4 py-3 rounded-xl transition-all duration-200 text-sm ${
+                            className={`w-full pl-12 pr-4 py-4 rounded-xl transition-all duration-200 text-base ${
                               isDark 
-                                ? 'bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/30' 
-                                : 'bg-white/70 border border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-1 focus:ring-blue-400/50 focus:border-blue-400/30'
-                            } focus:shadow-md`}
+                                ? 'bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/30' 
+                                : 'bg-white/70 border border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/30'
+                            } focus:shadow-lg`}
                             required
                           />
                         </motion.div>
@@ -461,23 +488,23 @@ const Login = () => {
                         disabled={loading}
                         whileHover={{ scale: loading ? 1 : 1.02 }}
                         whileTap={{ scale: loading ? 1 : 0.98 }}
-                        className={`w-full py-3 px-4 rounded-xl font-bold text-white bg-gradient-to-r ${
+                        className={`w-full py-4 px-6 rounded-xl font-bold text-white bg-gradient-to-r ${
                           selectedPortal.color
                         } shadow-lg hover:shadow-xl transform transition-all duration-200 ${
                           loading ? 'opacity-50 cursor-not-allowed' : ''
-                        } flex items-center justify-center gap-2 relative overflow-hidden group text-sm`}
+                        } flex items-center justify-center gap-3 relative overflow-hidden group text-lg`}
                       >
                         {/* Shine Effect */}
                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:translate-x-full transition-transform duration-600" />
                         
                         {loading ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             <span>Signing in...</span>
                           </>
                         ) : (
                           <>
-                            <LogIn className="w-4 h-4" />
+                            <LogIn className="w-5 h-5" />
                             <span>Access Portal</span>
                           </>
                         )}
@@ -489,14 +516,14 @@ const Login = () => {
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className={`mt-4 p-3 rounded-lg text-center ${
+                      className={`mt-6 p-4 rounded-xl text-center ${
                         isDark 
                           ? 'bg-gray-700/30 border border-gray-600/30' 
                           : 'bg-gray-100/50 border border-gray-200/30'
                       }`}
                     >
-                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        <span className="font-semibold">Demo:</span> Credentials auto-filled
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <span className="font-semibold">Demo Access:</span> Credentials auto-filled for quick login
                       </p>
                     </motion.div>
                   </div>
