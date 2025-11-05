@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   BarChart3,
-  TrendingUp,
-  Users,
-  Calendar,
   Download,
   Filter
 } from 'lucide-react'
@@ -57,6 +54,18 @@ const Reports = () => {
       setLoading(false)
     }
   }
+
+  const handleExportAll = () => {
+    alert('Exporting all reports... (functionality to be implemented)');
+  };
+
+  const handleView = (title) => {
+    alert(`Viewing report: ${title} (functionality to be implemented)`);
+  };
+
+  const handleDownload = (title) => {
+    alert(`Downloading report: ${title} (functionality to be implemented)`);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -113,6 +122,7 @@ const Reports = () => {
               </div>
               
               <motion.button
+                onClick={handleExportAll}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r ${currentTheme.primary} shadow-lg hover:shadow-xl flex items-center gap-2`}
@@ -128,7 +138,7 @@ const Reports = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {reports.map((report, index) => (
               <motion.div
@@ -136,44 +146,52 @@ const Reports = () => {
                 variants={itemVariants}
                 custom={index}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg cursor-pointer`}
+                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg flex flex-col justify-between`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-xl ${
-                      report.type === 'academic' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
-                      report.type === 'attendance' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
-                      'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400'
-                    }`}>
-                      <BarChart3 className="w-6 h-6" />
+                <div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-3 rounded-xl ${
+                          report.type === 'academic' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+                          report.type === 'attendance' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
+                          'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400'
+                        }`}>
+                          <BarChart3 className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {report.title}
+                          </h3>
+                          <p className={`text-sm capitalize ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {report.type} Report
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        report.status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                      }`}>
+                        {report.status === 'completed' ? 'Completed' : 'In Progress'}
+                      </div>
                     </div>
-                    <div>
-                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {report.title}
-                      </h3>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {report.type}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    report.status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                  }`}>
-                    {report.status === 'completed' ? 'Completed' : 'In Progress'}
-                  </div>
+
+                    <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} mb-4`}>
+                      Generated on {new Date(report.date).toLocaleDateString()}
+                    </p>
                 </div>
 
-                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} mb-4 line-clamp-2`}>
-                  Generated on {report.date}
-                </p>
-
-                <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <button className={`flex-1 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
+                <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button 
+                    onClick={() => handleView(report.title)} 
+                    className={`w-full text-center py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+                  >
                     View
                   </button>
-                  <button className={`flex-1 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
+                  <button 
+                    onClick={() => handleDownload(report.title)} 
+                    className={`w-full text-center py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+                  >
                     Download
                   </button>
                 </div>

@@ -6,7 +6,6 @@ import {
   Calendar,
   DollarSign,
   CheckCircle,
-  Clock,
   Search,
   Filter
 } from 'lucide-react'
@@ -54,6 +53,15 @@ const Invoices = () => {
           dueDate: '2024-11-20',
           status: 'pending',
           items: ['Tuition Fee - November 2024']
+        },
+        {
+          id: 3,
+          invoiceNumber: 'INV-2024-003',
+          studentName: 'Sophia Lee',
+          amount: 1350,
+          dueDate: '2024-11-18',
+          status: 'overdue',
+          items: ['Tuition Fee - November 2024', 'Lab Fee']
         }
       ]
       setInvoices(mockInvoices)
@@ -196,7 +204,7 @@ const Invoices = () => {
                 variants={itemVariants}
                 custom={index}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg cursor-pointer`}
+                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -217,12 +225,12 @@ const Invoices = () => {
                     </div>
                   </div>
                   
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  <div className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
                     invoice.status === 'paid' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
                     invoice.status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
                     'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                   }`}>
-                    {invoice.status === 'paid' ? 'Paid' : invoice.status === 'pending' ? 'Pending' : 'Overdue'}
+                    {invoice.status}
                   </div>
                 </div>
 
@@ -249,12 +257,14 @@ const Invoices = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <button className={`flex-1 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
+                <div className="flex gap-2 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button onClick={() => alert(`Downloading invoice ${invoice.invoiceNumber}...`)} className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
                     <Download className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    <span className="text-sm">Download</span>
                   </button>
-                  <button className={`flex-1 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
+                  <button onClick={() => alert(`Marking invoice ${invoice.invoiceNumber} as paid...`)} className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
                     <CheckCircle className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    <span className="text-sm">Mark as Paid</span>
                   </button>
                 </div>
               </motion.div>

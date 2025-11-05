@@ -16,16 +16,22 @@ import {
   Clock,
   Video,
   Edit3,
-  Plus
+  Plus,
+  LogOut
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAuth } from '../contexts/AuthContext'
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { isDark, currentTheme } = useTheme()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   const menuItems = {
     admin: [
@@ -116,9 +122,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         variants={sidebarVariants}
         initial="closed"
         animate={isOpen ? "open" : "closed"}
-        className={`fixed top-16 left-0 bottom-0 w-72 ${isDark ? 'glass-dark border-gray-700/30' : 'glass border-white/20'} border-r z-50 overflow-y-auto`}
+        className={`fixed top-16 left-0 bottom-0 w-72 ${isDark ? 'glass-dark border-gray-700/30' : 'glass border-white/20'} border-r z-50 flex flex-col`}
       >
-        <div className="p-4">
+        <div className="p-4 flex-1 overflow-y-auto">
           {/* User Info */}
           <div className={`mb-6 p-4 rounded-xl ${isDark ? 'bg-gray-800/50' : 'bg-white/50'}`}>
             <div className="flex items-center gap-3">
@@ -178,45 +184,19 @@ const Sidebar = ({ isOpen, onClose }) => {
               )
             })}
           </nav>
+        </div>
 
-          {/* Quick Actions */}
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <h4 className={`text-xs font-semibold ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-3 px-4`}>
-              QUICK ACTIONS
-            </h4>
-            
-            <div className="space-y-2">
-              {user?.role === 'teacher' && (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} text-white shadow-lg`}
-                  onClick={() => {
-                    navigate('/teacher/exams')
-                    onClose()
-                  }}
-                >
-                  <Plus className="w-5 h-5" />
-                  <span className="font-medium">Create Quick Exam</span>
-                </motion.button>
-              )}
-
-              {user?.role === 'student' && (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800' : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'} text-white shadow-lg`}
-                  onClick={() => {
-                    navigate('/student/exams')
-                    onClose()
-                  }}
-                >
-                  <Clock className="w-5 h-5" />
-                  <span className="font-medium">Available Exams</span>
-                </motion.button>
-              )}
-            </div>
-          </div>
+        {/* Logout Button */}
+        <div className="p-4">
+          <motion.button
+            onClick={handleLogout}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gray-800 hover:bg-red-900/20' : 'bg-gray-100 hover:bg-red-50'} text-red-500 transition-colors duration-200`}
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium text-sm">Logout</span>
+          </motion.button>
         </div>
       </motion.aside>
     </>

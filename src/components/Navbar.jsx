@@ -10,8 +10,7 @@ import {
   X,
   Sun,
   Moon,
-  User,
-  ChevronDown
+  User
 } from 'lucide-react'
 import Logo from './Logo'
 import { useTheme } from '../contexts/ThemeContext'
@@ -36,36 +35,20 @@ function useOnClickOutside(ref, handler) {
 }
 
 const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const { isDark, toggleDarkMode, currentTheme, setTheme, themes } = useTheme()
-  const navigate = useNavigate()
   
   const [searchQuery, setSearchQuery] = useState('')
-  // openMenu state দিয়ে এখন সব মেন্যু নিয়ন্ত্রণ করা হবে
-  const [openMenu, setOpenMenu] = useState(null) // 'profile', 'theme', 'notifications', or null
+  const [openMenu, setOpenMenu] = useState(null) // 'theme', 'notifications', or null
 
-  // প্রতিটি মেন্যুর জন্য ref তৈরি করা হয়েছে
-  const profileMenuRef = useRef(null)
   const themeMenuRef = useRef(null)
   const notificationsMenuRef = useRef(null)
 
-  // কাস্টম হুক ব্যবহার করে বাইরে ক্লিক করলে সব মেন্যু বন্ধ করার ব্যবস্থা
-  useOnClickOutside(profileMenuRef, () => openMenu === 'profile' && setOpenMenu(null))
   useOnClickOutside(themeMenuRef, () => openMenu === 'theme' && setOpenMenu(null))
   useOnClickOutside(notificationsMenuRef, () => openMenu === 'notifications' && setOpenMenu(null))
 
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
-
-  // নতুন টগল ফাংশন: একটি খুললে অন্যগুলো বন্ধ হয়ে যাবে
   const toggleMenu = (menuName) => {
-    if (openMenu === menuName) {
-      setOpenMenu(null); // যদি একই মেন্যু আবার ক্লিক করা হয়, তবে বন্ধ হবে
-    } else {
-      setOpenMenu(menuName); // নতুন মেন্যু খুলবে
-    }
+    setOpenMenu(prev => (prev === menuName ? null : menuName));
   }
 
   const getRoleBadgeColor = (role) => {
@@ -205,49 +188,19 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
               </AnimatePresence>
             </div>
 
-            {/* Profile Menu */}
-            <div className="relative" ref={profileMenuRef}>
-              <button
-                onClick={() => toggleMenu('profile')}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors`}
-              >
-                <img src={user?.avatar || 'https://ui-avatars.com/api/?name=User&background=random'} alt={user?.name} className="w-8 h-8 rounded-full" />
-                <div className="hidden sm:block text-left">
-                  <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{user?.name}</p>
-                  <div className="flex items-center gap-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full text-white ${getRoleBadgeColor(user?.role)}`}>{user?.role}</span>
-                  </div>
+            {/* Profile Link */}
+            <Link
+              to={`/${user?.role}/profile`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors`}
+            >
+              <img src={user?.avatar || 'https://ui-avatars.com/api/?name=User&background=random'} alt={user?.name} className="w-8 h-8 rounded-full" />
+              <div className="hidden sm:block text-left">
+                <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{user?.name}</p>
+                <div className="flex items-center gap-1">
+                  <span className={`text-xs px-2 py-0.5 rounded-full text-white ${getRoleBadgeColor(user?.role)}`}>{user?.role}</span>
                 </div>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <AnimatePresence>
-                {openMenu === 'profile' && (
-                  <motion.div
-                    variants={menuVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className={`absolute right-0 mt-2 w-48 ${isDark ? 'glass-card-dark' : 'glass-card-light'} rounded-xl shadow-premium-lg`}
-                  >
-                    <div className="p-2">
-                      <Link to={`/${user?.role}/profile`} onClick={() => setOpenMenu(null)} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
-                        <User className="w-4 h-4" />
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>Profile</span>
-                      </Link>
-                      <Link to={`/${user?.role}/settings`} onClick={() => setOpenMenu(null)} className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}>
-                        <Settings className="w-4 h-4" />
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>Settings</span>
-                      </Link>
-                      <div className={`border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} my-2`} />
-                      <button onClick={handleLogout} className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-red-900/20 text-red-400' : 'hover:bg-red-50 text-red-600'} transition-colors`}>
-                        <LogOut className="w-4 h-4" />
-                        <span className="text-sm">Logout</span>
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

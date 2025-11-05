@@ -207,7 +207,7 @@ const OnlineClasses = () => {
                 variants={itemVariants}
                 custom={index}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg cursor-pointer`}
+                className={`p-6 rounded-2xl ${isDark ? 'glass-card-dark' : 'glass-card-light'} shadow-premium-lg`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -228,7 +228,7 @@ const OnlineClasses = () => {
                     </div>
                   </div>
                   
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  <div className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
                     classItem.status === 'live' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
                     classItem.status === 'scheduled' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
                     'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
@@ -266,27 +266,19 @@ const OnlineClasses = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex gap-2 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
                   <motion.button
+                    onClick={() => alert(classItem.type === 'live' ? `Joining class: ${classItem.title}` : `Viewing recording: ${classItem.title}`)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`flex-1 px-4 py-2 rounded-xl font-medium ${
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-medium ${
                       classItem.type === 'live'
                         ? isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-100 text-red-600 hover:bg-red-200'
                         : isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
                     } transition-colors`}
                   >
-                    {classItem.type === 'live' ? (
-                      <>
-                        <Play className="w-4 h-4" />
-                        <span>Join Class</span>
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-4 h-4" />
-                        <span>View Recording</span>
-                      </>
-                    )}
+                    <Play className="w-4 h-4" />
+                    <span>{classItem.type === 'live' ? 'Join Class' : 'View Recording'}</span>
                   </motion.button>
                 </div>
               </motion.div>
