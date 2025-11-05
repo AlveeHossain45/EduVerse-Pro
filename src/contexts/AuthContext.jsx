@@ -1,111 +1,110 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { seedMockData } from '../utils/storage.js'
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { seedMockData } from '../utils/storage.js';
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 export const useAuth = () => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context
-}
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // অ্যাপটি প্রথমবার লোড হওয়ার সময় মক ডেটা তৈরি করার জন্য
   useEffect(() => {
     const initializeApp = async () => {
-      // যদি মক ডেটা না থাকে তবে তা তৈরি করুন
-      await seedMockData()
+      // Step 1: Ensure mock data exists if storage is empty
+      await seedMockData();
       
-      // এই অংশটি লগইন সেশন মনে রাখা বন্ধ করবে
-      // আগের কোডটি মুছে দিয়ে শুধুমাত্র setLoading(false) রাখা হয়েছে
-      setLoading(false)
-    }
+      // Step 2: We are removing the session check to force login every time.
+      // The following lines have been removed:
+      // const storedUser = localStorage.getItem('currentUser');
+      // if (storedUser) {
+      //   setUser(JSON.parse(storedUser));
+      // }
+      
+      setLoading(false);
+    };
 
-    initializeApp()
-  }, [])
+    initializeApp();
+  }, []);
 
   const login = async (email, password) => {
     try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]')
-      const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase())
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
       
       if (!foundUser || foundUser.password !== password) {
-        return { success: false, error: 'আপনার দেওয়া ইমেল বা পাসওয়ার্ড ভুল।' }
+        return { success: false, error: 'আপনার দেওয়া ইমেল বা পাসওয়ার্ড ভুল।' };
       }
 
-      const token = btoa(`${foundUser.id}:${Date.now()}:${Math.random()}`)
       const userSession = {
         id: foundUser.id,
         name: foundUser.name,
         email: foundUser.email,
         role: foundUser.role,
-        avatar: foundUser.avatar
-      }
+        avatar: foundUser.avatar,
+      };
 
-      localStorage.setItem('currentUser', JSON.stringify(userSession))
-      localStorage.setItem('authToken', token)
-      localStorage.setItem('sessionStart', Date.now().toString())
-
-      setUser(userSession)
+      // We will still set the session for the current visit
+      localStorage.setItem('currentUser', JSON.stringify(userSession));
+      setUser(userSession);
       
-      return { success: true, user: userSession }
+      return { success: true, user: userSession };
     } catch (error) {
-      return { success: false, error: 'একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।' }
+      return { success: false, error: 'একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।' };
     }
-  }
+  };
 
   const register = async (userData) => {
     try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]')
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
       
       if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
-        throw new Error('এই ইমেল দিয়ে ইতিমধ্যে রেজিস্ট্রেশন করা হয়েছে।')
+        throw new Error('এই ইমেল দিয়ে ইতিমধ্যে রেজিস্ট্রেশন করা হয়েছে।');
       }
 
       const newUser = {
-        id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        name: userData.name,
-        email: userData.email,
-        password: userData.password,
-        role: userData.role || 'student',
-        avatar: userData.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
+        id: `user_${Date.now()}`,
+        ...userData,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
         createdAt: new Date().toISOString(),
-        ...userData
-      }
+      };
 
-      users.push(newUser)
-      localStorage.setItem('users', JSON.stringify(users))
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
 
-      return await login(userData.email, userData.password)
+      return await login(userData.email, userData.password);
     } catch (error) {
-      return { success: false, error: error.message }
+      return { success: false, error: error.message };
     }
-  }
+  };
 
   const logout = () => {
-    localStorage.removeItem('currentUser')
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('sessionStart')
-    setUser(null)
-  }
+    // Clear the session from both localStorage and state
+    localStorage.removeItem('currentUser');
+    setUser(null);
+  };
 
   const updateUser = (userData) => {
-    const updatedUser = { ...user, ...userData }
-    setUser(updatedUser)
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser))
+    if (!user) return;
     
-    const users = JSON.parse(localStorage.getItem('users') || '[]')
-    const userIndex = users.findIndex(u => u.id === user.id)
+    const updatedUserInState = { ...user, ...userData };
+    setUser(updatedUserInState);
+    
+    localStorage.setItem('currentUser', JSON.stringify(updatedUserInState));
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const userIndex = users.findIndex(u => u.id === user.id);
     if (userIndex !== -1) {
-      users[userIndex] = { ...users[userIndex], ...userData }
-      localStorage.setItem('users', JSON.stringify(users))
+      users[userIndex] = { ...users[userIndex], ...userData };
+      localStorage.setItem('users', JSON.stringify(users));
     }
-  }
+  };
 
   const value = {
     user,
@@ -114,11 +113,11 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     loading
-  }
+  };
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
