@@ -1,52 +1,54 @@
-import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './contexts/AuthContext'
-import ProtectedRoute from './routes/ProtectedRoute'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 // Auth Pages
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
 // Admin Pages
-import AdminDashboard from './pages/admin/AdminDashboard'
-import ManageUsers from './pages/admin/ManageUsers'
-import SystemSettings from './pages/admin/Settings'
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageTeachers from './pages/admin/ManageTeachers';
+import ManageStudents from './pages/admin/ManageStudents';
+import NoticeBoard from './pages/admin/NoticeBoard';
+import AcademicStructure from './pages/admin/AcademicStructure';
+import SystemSettings from './pages/admin/Settings';
 
 // Teacher Pages
-import TeacherDashboard from './pages/teacher/TeacherDashboard'
-import Classes from './pages/teacher/Classes'
-import CreateExam from './pages/teacher/CreateExam'
+import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import CreateExam from './pages/teacher/CreateExam';
 
 // Student Pages
-import StudentDashboard from './pages/student/StudentDashboard'
-import OnlineExam from './pages/student/OnlineExam'
-import Attendance from './pages/student/Attendance'
+import StudentDashboard from './pages/student/StudentDashboard';
+import OnlineExam from './pages/student/OnlineExam';
+import Attendance from './pages/student/Attendance';
 
 // Accountant Pages
-import AccountantDashboard from './pages/accountant/AccountantDashboard'
-import Payments from './pages/accountant/Payments'
+import AccountantDashboard from './pages/accountant/AccountantDashboard';
+import Payments from './pages/accountant/Payments';
 
 // Shared Pages
-import Profile from './pages/shared/Profile'
-import Settings from './pages/shared/Settings'
-import ClassesList from './pages/shared/Classes'
-import ExamsList from './pages/shared/Exams'
-import Assignments from './pages/shared/Assignments'
-import Messages from './pages/shared/Messages'
-import Reports from './pages/shared/Reports'
-import Invoices from './pages/shared/Invoices'
-import Finance from './pages/shared/Finance'
-import OnlineClasses from './pages/shared/OnlineClasses'
+import Profile from './pages/shared/Profile';
+import Settings from './pages/shared/Settings';
+import ClassesList from './pages/shared/Classes';
+import ExamsList from './pages/shared/Exams';
+import Assignments from './pages/shared/Assignments';
+import Messages from './pages/shared/Messages';
+import Reports from './pages/shared/Reports';
+import Invoices from './pages/shared/Invoices';
+import Finance from './pages/shared/Finance';
+import OnlineClasses from './pages/shared/OnlineClasses';
 
 function App() {
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -56,194 +58,61 @@ function App() {
       <Route path="/register" element={!user ? <Register /> : <Navigate to={`/${user.role}/dashboard`} />} />
       
       {/* Admin Routes */}
-      <Route path="/admin/dashboard" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <AdminDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/users" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <ManageUsers />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/settings" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <SystemSettings />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/profile" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <Profile />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/classes" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <ClassesList />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/exams" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <ExamsList />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/attendance" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <Reports />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/finance" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <Finance />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/reports" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <Reports />
-        </ProtectedRoute>
-      } />
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={['admin']}><ManageTeachers /></ProtectedRoute>} />
+      <Route path="/admin/students" element={<ProtectedRoute allowedRoles={['admin']}><ManageStudents /></ProtectedRoute>} />
+      <Route path="/admin/noticeboard" element={<ProtectedRoute allowedRoles={['admin', 'teacher']}><NoticeBoard /></ProtectedRoute>} />
+      <Route path="/admin/academic-structure" element={<ProtectedRoute allowedRoles={['admin']}><AcademicStructure /></ProtectedRoute>} />
+      <Route path="/admin/classes" element={<ProtectedRoute allowedRoles={['admin']}><ClassesList /></ProtectedRoute>} />
+      <Route path="/admin/exams" element={<ProtectedRoute allowedRoles={['admin']}><ExamsList /></ProtectedRoute>} />
+      <Route path="/admin/attendance" element={<ProtectedRoute allowedRoles={['admin']}><Reports /></ProtectedRoute>} />
+      <Route path="/admin/finance" element={<ProtectedRoute allowedRoles={['admin']}><Finance /></ProtectedRoute>} />
+      <Route path="/admin/reports" element={<ProtectedRoute allowedRoles={['admin']}><Reports /></ProtectedRoute>} />
+      <Route path="/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><SystemSettings /></ProtectedRoute>} />
+      <Route path="/admin/profile" element={<ProtectedRoute allowedRoles={['admin']}><Profile /></ProtectedRoute>} />
 
       {/* Teacher Routes */}
-      <Route path="/teacher/dashboard" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <TeacherDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/classes" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Classes />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/exams" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <CreateExam />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/profile" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Profile />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/settings" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Settings />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/assignments" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Assignments />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/attendance" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Reports />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/online-classes" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <OnlineClasses />
-        </ProtectedRoute>
-      } />
-      <Route path="/teacher/messages" element={
-        <ProtectedRoute allowedRoles={['teacher']}>
-          <Messages />
-        </ProtectedRoute>
-      } />
+      <Route path="/teacher/dashboard" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>} />
+      <Route path="/teacher/classes" element={<ProtectedRoute allowedRoles={['teacher']}><ClassesList /></ProtectedRoute>} />
+      <Route path="/teacher/exams" element={<ProtectedRoute allowedRoles={['teacher']}><CreateExam /></ProtectedRoute>} />
+      <Route path="/teacher/assignments" element={<ProtectedRoute allowedRoles={['teacher']}><Assignments /></ProtectedRoute>} />
+      <Route path="/teacher/noticeboard" element={<ProtectedRoute allowedRoles={['teacher']}><NoticeBoard /></ProtectedRoute>} />
+      <Route path="/teacher/profile" element={<ProtectedRoute allowedRoles={['teacher']}><Profile /></ProtectedRoute>} />
+      <Route path="/teacher/settings" element={<ProtectedRoute allowedRoles={['teacher']}><Settings /></ProtectedRoute>} />
+      <Route path="/teacher/attendance" element={<ProtectedRoute allowedRoles={['teacher']}><Reports /></ProtectedRoute>} />
+      <Route path="/teacher/online-classes" element={<ProtectedRoute allowedRoles={['teacher']}><OnlineClasses /></ProtectedRoute>} />
+      <Route path="/teacher/messages" element={<ProtectedRoute allowedRoles={['teacher']}><Messages /></ProtectedRoute>} />
 
       {/* Student Routes */}
-      <Route path="/student/dashboard" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <StudentDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/exam/:id" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <OnlineExam />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/attendance" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <Attendance />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/profile" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <Profile />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/classes" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <ClassesList />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/exams" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <ExamsList />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/assignments" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <Assignments />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/results" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <Reports />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/online-classes" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <OnlineClasses />
-        </ProtectedRoute>
-      } />
-      <Route path="/student/messages" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <Messages />
-        </ProtectedRoute>
-      } />
+      <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
+      <Route path="/student/noticeboard" element={<ProtectedRoute allowedRoles={['student']}><NoticeBoard /></ProtectedRoute>} />
+      <Route path="/student/exam/:id" element={<ProtectedRoute allowedRoles={['student']}><OnlineExam /></ProtectedRoute>} />
+      <Route path="/student/attendance" element={<ProtectedRoute allowedRoles={['student']}><Attendance /></ProtectedRoute>} />
+      <Route path="/student/profile" element={<ProtectedRoute allowedRoles={['student']}><Profile /></ProtectedRoute>} />
+      <Route path="/student/classes" element={<ProtectedRoute allowedRoles={['student']}><ClassesList /></ProtectedRoute>} />
+      <Route path="/student/exams" element={<ProtectedRoute allowedRoles={['student']}><ExamsList /></ProtectedRoute>} />
+      <Route path="/student/assignments" element={<ProtectedRoute allowedRoles={['student']}><Assignments /></ProtectedRoute>} />
+      <Route path="/student/results" element={<ProtectedRoute allowedRoles={['student']}><Reports /></ProtectedRoute>} />
+      <Route path="/student/online-classes" element={<ProtectedRoute allowedRoles={['student']}><OnlineClasses /></ProtectedRoute>} />
+      <Route path="/student/messages" element={<ProtectedRoute allowedRoles={['student']}><Messages /></ProtectedRoute>} />
 
       {/* Accountant Routes */}
-      <Route path="/accountant/dashboard" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <AccountantDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/accountant/payments" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <Payments />
-        </ProtectedRoute>
-      } />
-      <Route path="/accountant/profile" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <Profile />
-        </ProtectedRoute>
-      } />
-      <Route path="/accountant/settings" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <Settings />
-        </ProtectedRoute>
-      } />
-      <Route path="/accountant/invoices" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <Invoices />
-        </ProtectedRoute>
-      } />
-      <Route path="/accountant/reports" element={
-        <ProtectedRoute allowedRoles={['accountant']}>
-          <Reports />
-        </ProtectedRoute>
-      } />
+      <Route path="/accountant/dashboard" element={<ProtectedRoute allowedRoles={['accountant']}><AccountantDashboard /></ProtectedRoute>} />
+      <Route path="/accountant/payments" element={<ProtectedRoute allowedRoles={['accountant']}><Payments /></ProtectedRoute>} />
+      <Route path="/accountant/profile" element={<ProtectedRoute allowedRoles={['accountant']}><Profile /></ProtectedRoute>} />
+      <Route path="/accountant/settings" element={<ProtectedRoute allowedRoles={['accountant']}><Settings /></ProtectedRoute>} />
+      <Route path="/accountant/invoices" element={<ProtectedRoute allowedRoles={['accountant']}><Invoices /></ProtectedRoute>} />
+      <Route path="/accountant/reports" element={<ProtectedRoute allowedRoles={['accountant']}><Reports /></ProtectedRoute>} />
 
       {/* Default Route */}
-      <Route path="/" element={
-        user ? <Navigate to={`/${user.role}/dashboard`} /> : <Navigate to="/login" />
-      } />
+      <Route path="/" element={user ? <Navigate to={`/${user.role}/dashboard`} /> : <Navigate to="/login" />} />
 
-      {/* Catch all route */}
+      {/* Catch-all Route for 404 */}
       <Route path="*" element={
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-            <p className="text-gray-600 mb-8">Page not found</p>
+            <p className="text-gray-600 mb-8">Page Not Found</p>
             <button
               onClick={() => window.history.back()}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -254,7 +123,7 @@ function App() {
         </div>
       } />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
