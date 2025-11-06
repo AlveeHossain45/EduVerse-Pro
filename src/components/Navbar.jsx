@@ -1,28 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Search, 
-  Bell, 
-  Settings, 
-  LogOut, 
-  Menu, 
-  X,
-  Sun,
-  Moon,
-  User
-} from 'lucide-react'
-import Logo from './Logo'
-import { useTheme } from '../contexts/ThemeContext'
-import { useAuth } from '../contexts/AuthContext'
+  Search, Bell, Settings, LogOut, Menu, X, Sun, Moon, User, ChevronDown
+} from 'lucide-react';
+import Logo from './Logo';
+import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
-// কাস্টম হুক: কোনো এলিমেন্টের বাইরে ক্লিক করলে মেন্যু বন্ধ করার জন্য
 function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
+      if (!ref.current || ref.current.contains(event.target)) return;
       handler(event);
     };
     document.addEventListener("mousedown", listener);
@@ -35,54 +24,45 @@ function useOnClickOutside(ref, handler) {
 }
 
 const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
-  const { user } = useAuth()
-  const { isDark, toggleDarkMode, currentTheme, setTheme, themes } = useTheme()
-  
-  const [searchQuery, setSearchQuery] = useState('')
-  const [openMenu, setOpenMenu] = useState(null) // 'theme', 'notifications', or null
+  const { user } = useAuth();
+  const { isDark, toggleDarkMode, currentTheme, setTheme, themes } = useTheme();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [openMenu, setOpenMenu] = useState(null);
 
-  const themeMenuRef = useRef(null)
-  const notificationsMenuRef = useRef(null)
+  const themeMenuRef = useRef(null);
+  const notificationsMenuRef = useRef(null);
+  const profileMenuRef = useRef(null);
 
-  useOnClickOutside(themeMenuRef, () => openMenu === 'theme' && setOpenMenu(null))
-  useOnClickOutside(notificationsMenuRef, () => openMenu === 'notifications' && setOpenMenu(null))
+  useOnClickOutside(themeMenuRef, () => openMenu === 'theme' && setOpenMenu(null));
+  useOnClickOutside(notificationsMenuRef, () => openMenu === 'notifications' && setOpenMenu(null));
+  useOnClickOutside(profileMenuRef, () => openMenu === 'profile' && setOpenMenu(null));
 
   const toggleMenu = (menuName) => {
     setOpenMenu(prev => (prev === menuName ? null : menuName));
-  }
-
-  const getRoleBadgeColor = (role) => {
-    const colors = {
-      admin: 'bg-red-500',
-      teacher: 'bg-blue-500',
-      student: 'bg-green-500',
-      accountant: 'bg-purple-500'
-    }
-    return colors[role] || 'bg-gray-500'
-  }
+  };
 
   const menuVariants = {
     hidden: { opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.1 } },
     visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.2 } },
     exit: { opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.1 } }
-  }
+  };
 
   const notifications = [
-    { id: 1, title: 'New exam scheduled', message: 'Mathematics Midterm Exam', time: '2 hours ago', read: false },
-    { id: 2, title: 'Attendance marked', message: 'Your attendance has been updated', time: '5 hours ago', read: false },
-    { id: 3, title: 'Fee reminder', message: 'Tuition fee due next week', time: '1 day ago', read: true }
-  ]
+    { id: 1, title: 'New exam scheduled', time: '2 hours ago', read: false },
+    { id: 2, title: 'Attendance marked', time: '5 hours ago', read: false },
+    { id: 3, title: 'Fee reminder', time: '1 day ago', read: true }
+  ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 ${isDark ? 'glass-dark' : 'glass'} border-b ${isDark ? 'border-gray-700/30' : 'border-white/20'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 ${isDark ? 'glass-card-dark' : 'glass-card-light'} border-b`}>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors`}
+              className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'} transition-colors`}
             >
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {sidebarOpen ? <X className={`w-5 h-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} /> : <Menu className={`w-5 h-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />}
             </button>
             <Link to={`/${user?.role}/dashboard`} className="flex items-center">
               <Logo size="small" />
@@ -91,121 +71,38 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
 
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search students, classes, exams..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-10 pr-4 py-2 rounded-xl ${isDark ? 'input-glass-dark' : 'input-glass'} ${isDark ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'}`}
-              />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input type="text" placeholder="Search anything..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-11 pr-4 py-2 rounded-xl ${isDark ? 'input-glass-dark focus:border-blue-500/50' : 'input-glass focus:border-blue-500/50'}`} />
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Theme Toggle */}
-            <div className="relative" ref={themeMenuRef}>
-              <button
-                onClick={() => toggleMenu('theme')}
-                className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors`}
-              >
-                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <AnimatePresence>
-                {openMenu === 'theme' && (
-                  <motion.div
-                    variants={menuVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className={`absolute right-0 mt-2 w-48 ${isDark ? 'glass-card-dark' : 'glass-card-light'} rounded-xl shadow-premium-lg`}
-                  >
-                    <div className="p-2">
-                      <p className={`text-xs font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2 px-2`}>THEME</p>
-                      <button
-                        onClick={() => {
-                          toggleDarkMode()
-                          setOpenMenu(null)
-                        }}
-                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors`}
-                      >
-                        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
-                      </button>
-                      <div className={`border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} my-2`} />
-                      <p className={`text-xs font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2 px-2`}>COLOR</p>
-                      {Object.entries(themes).map(([key, theme]) => (
-                        <button
-                          key={key}
-                          onClick={() => {
-                            setTheme(key)
-                            setOpenMenu(null)
-                          }}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-gray-100'} transition-colors ${currentTheme.name === theme.name ? (isDark ? 'bg-gray-700/50' : 'bg-gray-100') : ''}`}
-                        >
-                          <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${theme.primary}`} />
-                          <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{theme.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Notifications */}
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle Button */}
+            <button onClick={toggleDarkMode} className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'} transition-colors`}>
+              {isDark ? <Sun className="w-5 h-5 text-gray-300" /> : <Moon className="w-5 h-5 text-gray-600" />}
+            </button>
+            
+            {/* Notifications Button */}
             <div className="relative" ref={notificationsMenuRef}>
-              <button
-                onClick={() => toggleMenu('notifications')}
-                className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors relative`}
-              >
-                <Bell className="w-5 h-5" />
-                {notifications.filter(n => !n.read).length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />}
+              <button onClick={() => toggleMenu('notifications')} className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'} transition-colors relative`}>
+                <Bell className={`w-5 h-5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
+                {notifications.filter(n => !n.read).length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />}
               </button>
-              <AnimatePresence>
-                {openMenu === 'notifications' && (
-                  <motion.div
-                    variants={menuVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className={`absolute right-0 mt-2 w-80 ${isDark ? 'glass-card-dark' : 'glass-card-light'} rounded-xl shadow-premium-lg`}
-                  >
-                    <div className="p-4">
-                      <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-3`}>Notifications</h3>
-                      <div className="space-y-2">
-                        {notifications.map((notification) => (
-                          <div key={notification.id} className={`p-3 rounded-lg ${!notification.read ? (isDark ? 'bg-gray-700/30' : 'bg-blue-50') : ''}`}>
-                            <p className={`font-medium text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{notification.title}</p>
-                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>{notification.message}</p>
-                            <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mt-1`}>{notification.time}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
 
             {/* Profile Link */}
-            <Link
-              to={`/${user?.role}/profile`}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'hover:bg-gray-700/30' : 'hover:bg-white/20'} transition-colors`}
-            >
-              <img src={user?.avatar || 'https://ui-avatars.com/api/?name=User&background=random'} alt={user?.name} className="w-8 h-8 rounded-full" />
+            <Link to={`/${user?.role}/profile`} className={`flex items-center gap-2 px-2 py-1 rounded-full ${isDark ? 'hover:bg-gray-700/50' : 'hover:bg-gray-200/50'} transition-colors`}>
+              <img src={user?.avatar} alt={user?.name} className="w-8 h-8 rounded-full" />
               <div className="hidden sm:block text-left">
-                <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{user?.name}</p>
-                <div className="flex items-center gap-1">
-                  <span className={`text-xs px-2 py-0.5 rounded-full text-white ${getRoleBadgeColor(user?.role)}`}>{user?.role}</span>
-                </div>
+                <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>{user?.name}</p>
+                <span className={`text-xs capitalize px-2 py-0.5 rounded-full ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>{user?.role}</span>
               </div>
             </Link>
           </div>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
