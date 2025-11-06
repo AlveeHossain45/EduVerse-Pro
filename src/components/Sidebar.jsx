@@ -2,9 +2,23 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  LayoutDashboard, Users, GraduationCap, BookOpen, FileText, Calendar,
-  DollarSign, Settings, Award, MessageSquare, BarChart3, LogOut,
-  ClipboardList, Network, Plus, Edit3, Video
+  LayoutDashboard,
+  Users,
+  GraduationCap,
+  BookOpen,
+  FileText,
+  Calendar,
+  DollarSign,
+  Settings,
+  Award,
+  MessageSquare,
+  BarChart3,
+  LogOut,
+  ClipboardList,
+  Network,
+  Plus,
+  Edit3,
+  Video
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -34,32 +48,33 @@ const Sidebar = ({ isOpen, onClose }) => {
       { title: 'Settings', icon: Settings, path: '/admin/settings' }
     ],
     teacher: [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/teacher/dashboard' },
-        { title: 'My Classes', icon: GraduationCap, path: '/teacher/classes' },
-        { title: 'Create Exam', icon: Plus, path: '/teacher/exams' },
-        { title: 'Assignments', icon: Edit3, path: '/teacher/assignments' },
-        { title: 'Mark Attendance', icon: Calendar, path: '/teacher/mark-attendance' },
-        { title: 'Online Classes', icon: Video, path: '/teacher/online-classes' },
-        { title: 'Messages', icon: MessageSquare, path: '/teacher/messages' },
-        { title: 'Notice Board', icon: ClipboardList, path: '/teacher/noticeboard' },
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/teacher/dashboard' },
+      { title: 'My Classes', icon: GraduationCap, path: '/teacher/classes' },
+      { title: 'Create Exam', icon: Plus, path: '/teacher/exams' },
+      { title: 'Assignments', icon: Edit3, path: '/teacher/assignments' },
+      { title: 'Mark Attendance', icon: Calendar, path: '/teacher/mark-attendance' },
+      { title: 'Online Classes', icon: Video, path: '/teacher/online-classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/teacher/messages' },
+      { title: 'Notice Board', icon: ClipboardList, path: '/teacher/noticeboard' },
     ],
     student: [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
-        { title: 'Notice Board', icon: ClipboardList, path: '/student/noticeboard' },
-        { title: 'My Classes', icon: GraduationCap, path: '/student/classes' },
-        { title: 'Exams', icon: FileText, path: '/student/exams' },
-        { title: 'Assignments', icon: Edit3, path: '/student/assignments' },
-        { title: 'Attendance', icon: Calendar, path: '/student/attendance' },
-        { title: 'Results', icon: Award, path: '/student/results' },
-        { title: 'Online Classes', icon: Video, path: '/student/online-classes' },
-        { title: 'Messages', icon: MessageSquare, path: '/student/messages' }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
+      { title: 'Notice Board', icon: ClipboardList, path: '/student/noticeboard' },
+      { title: 'My Classes', icon: GraduationCap, path: '/student/classes' },
+      { title: 'Exams', icon: FileText, path: '/student/exams' },
+      { title: 'Assignments', icon: Edit3, path: '/student/assignments' },
+      { title: 'My Finances', icon: DollarSign, path: '/student/finance' },
+      { title: 'Attendance', icon: Calendar, path: '/student/attendance' },
+      { title: 'Results', icon: Award, path: '/student/results' },
+      { title: 'Online Classes', icon: Video, path: '/student/online-classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/student/messages' }
     ],
     accountant: [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/accountant/dashboard' },
-        { title: 'Fee Management', icon: DollarSign, path: '/accountant/payments' },
-        { title: 'Invoices', icon: FileText, path: '/accountant/invoices' },
-        { title: 'Reports', icon: BarChart3, path: '/accountant/reports' },
-        { title: 'Settings', icon: Settings, path: '/accountant/settings' }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/accountant/dashboard' },
+      { title: 'Fee Management', icon: DollarSign, path: '/accountant/payments' },
+      { title: 'Invoices', icon: FileText, path: '/accountant/invoices' },
+      { title: 'Reports', icon: BarChart3, path: '/accountant/reports' },
+      { title: 'Settings', icon: Settings, path: '/accountant/settings' }
     ]
   };
 
@@ -80,6 +95,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         className={`fixed top-16 left-0 bottom-0 w-72 ${isDark ? 'glass-card-dark' : 'glass-card-light'} border-r z-50 flex flex-col`}
       >
         <div className="p-4 flex-1 overflow-y-auto">
+          {/* User Info */}
           <div className={`mb-6 p-4 rounded-xl ${isDark ? 'bg-black/20' : 'bg-gray-100/50'}`}>
             <div className="flex items-center gap-3">
               <img src={user?.avatar} alt={user?.name} className="w-12 h-12 rounded-full" />
@@ -89,6 +105,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </div>
             </div>
           </div>
+          {/* Navigation Menu */}
           <nav className="space-y-1">
             {currentMenuItems.map((item) => {
               const isActive = location.pathname.startsWith(item.path);
@@ -116,6 +133,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             })}
           </nav>
         </div>
+        {/* Logout Button */}
         <div className="p-4">
           <motion.button onClick={handleLogout} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'bg-gray-800 hover:bg-red-900/20' : 'bg-gray-100 hover:bg-red-50'} text-red-500 transition-colors duration-200`}>
             <LogOut className="w-5 h-5" />
