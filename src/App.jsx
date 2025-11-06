@@ -18,6 +18,7 @@ import SystemSettings from './pages/admin/Settings';
 // Teacher Pages
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import CreateExam from './pages/teacher/CreateExam';
+import MarkAttendance from './pages/teacher/MarkAttendance';
 
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -45,7 +46,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -61,11 +62,11 @@ function App() {
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={['admin']}><ManageTeachers /></ProtectedRoute>} />
       <Route path="/admin/students" element={<ProtectedRoute allowedRoles={['admin']}><ManageStudents /></ProtectedRoute>} />
-      <Route path="/admin/noticeboard" element={<ProtectedRoute allowedRoles={['admin', 'teacher']}><NoticeBoard /></ProtectedRoute>} />
+      <Route path="/admin/noticeboard" element={<ProtectedRoute allowedRoles={['admin']}><NoticeBoard /></ProtectedRoute>} />
       <Route path="/admin/academic-structure" element={<ProtectedRoute allowedRoles={['admin']}><AcademicStructure /></ProtectedRoute>} />
       <Route path="/admin/classes" element={<ProtectedRoute allowedRoles={['admin']}><ClassesList /></ProtectedRoute>} />
       <Route path="/admin/exams" element={<ProtectedRoute allowedRoles={['admin']}><ExamsList /></ProtectedRoute>} />
-      <Route path="/admin/attendance" element={<ProtectedRoute allowedRoles={['admin']}><Reports /></ProtectedRoute>} />
+      <Route path="/admin/attendance" element={<ProtectedRoute allowedRoles={['admin']}><Reports /></ProtectedRoute>} /> {/* Admin views reports for attendance */}
       <Route path="/admin/finance" element={<ProtectedRoute allowedRoles={['admin']}><Finance /></ProtectedRoute>} />
       <Route path="/admin/reports" element={<ProtectedRoute allowedRoles={['admin']}><Reports /></ProtectedRoute>} />
       <Route path="/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><SystemSettings /></ProtectedRoute>} />
@@ -76,10 +77,10 @@ function App() {
       <Route path="/teacher/classes" element={<ProtectedRoute allowedRoles={['teacher']}><ClassesList /></ProtectedRoute>} />
       <Route path="/teacher/exams" element={<ProtectedRoute allowedRoles={['teacher']}><CreateExam /></ProtectedRoute>} />
       <Route path="/teacher/assignments" element={<ProtectedRoute allowedRoles={['teacher']}><Assignments /></ProtectedRoute>} />
+      <Route path="/teacher/mark-attendance" element={<ProtectedRoute allowedRoles={['teacher']}><MarkAttendance /></ProtectedRoute>} />
       <Route path="/teacher/noticeboard" element={<ProtectedRoute allowedRoles={['teacher']}><NoticeBoard /></ProtectedRoute>} />
       <Route path="/teacher/profile" element={<ProtectedRoute allowedRoles={['teacher']}><Profile /></ProtectedRoute>} />
       <Route path="/teacher/settings" element={<ProtectedRoute allowedRoles={['teacher']}><Settings /></ProtectedRoute>} />
-      <Route path="/teacher/attendance" element={<ProtectedRoute allowedRoles={['teacher']}><Reports /></ProtectedRoute>} />
       <Route path="/teacher/online-classes" element={<ProtectedRoute allowedRoles={['teacher']}><OnlineClasses /></ProtectedRoute>} />
       <Route path="/teacher/messages" element={<ProtectedRoute allowedRoles={['teacher']}><Messages /></ProtectedRoute>} />
 
@@ -109,10 +110,10 @@ function App() {
 
       {/* Catch-all Route for 404 */}
       <Route path="*" element={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-            <p className="text-gray-600 mb-8">Page Not Found</p>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-gray-900">
+          <div className="text-center p-8 bg-white/50 dark:bg-black/20 backdrop-blur-lg rounded-2xl shadow-lg">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">404</h1>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">Page Not Found</p>
             <button
               onClick={() => window.history.back()}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

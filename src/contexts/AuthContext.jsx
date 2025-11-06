@@ -17,15 +17,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeApp = async () => {
-      // Step 1: Ensure mock data exists if storage is empty
+      // Step 1: Ensure mock data is seeded correctly if it doesn't exist or is outdated.
       await seedMockData();
       
-      // Step 2: We are removing the session check to force login every time.
-      // The following lines have been removed:
-      // const storedUser = localStorage.getItem('currentUser');
-      // if (storedUser) {
-      //   setUser(JSON.parse(storedUser));
-      // }
+      // Step 2: Remove any lingering session from localStorage on app load.
+      // This will ensure the login page is always shown first.
+      localStorage.removeItem('currentUser');
+      setUser(null);
       
       setLoading(false);
     };
@@ -38,80 +36,43 @@ export const AuthProvider = ({ children }) => {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
       
-      if (!foundUser || foundUser.password !== password) {
-        return { success: false, error: 'আপনার দেওয়া ইমেল বা পাসওয়ার্ড ভুল।' };
+      if (!foundUser) {
+        return { success: false, error: 'এই ইমেল দিয়ে কোনো ব্যবহারকারী খুঁজে পাওয়া যায়নি।' };
+      }
+      if (foundUser.password !== password) {
+        return { success: false, error: 'আপনার দেওয়া পাসওয়ার্ডটি ভুল।' };
       }
 
+      // Create a user session object for the current session
       const userSession = {
         id: foundUser.id,
         name: foundUser.name,
         email: foundUser.email,
         role: foundUser.role,
         avatar: foundUser.avatar,
+        classId: foundUser.classId // Important for students
       };
 
-      // We will still set the session for the current visit
+      // Set user for the current session
       localStorage.setItem('currentUser', JSON.stringify(userSession));
       setUser(userSession);
       
       return { success: true, user: userSession };
     } catch (error) {
-      return { success: false, error: 'একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।' };
-    }
-  };
-
-  const register = async (userData) => {
-    try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
-        throw new Error('এই ইমেল দিয়ে ইতিমধ্যে রেজিস্ট্রেশন করা হয়েছে।');
-      }
-
-      const newUser = {
-        id: `user_${Date.now()}`,
-        ...userData,
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
-        createdAt: new Date().toISOString(),
-      };
-
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-
-      return await login(userData.email, userData.password);
-    } catch (error) {
-      return { success: false, error: error.message };
+      console.error("Login error:", error);
+      return { success: false, error: 'লগইন করার সময় একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।' };
     }
   };
 
   const logout = () => {
-    // Clear the session from both localStorage and state
     localStorage.removeItem('currentUser');
     setUser(null);
-  };
-
-  const updateUser = (userData) => {
-    if (!user) return;
-    
-    const updatedUserInState = { ...user, ...userData };
-    setUser(updatedUserInState);
-    
-    localStorage.setItem('currentUser', JSON.stringify(updatedUserInState));
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex(u => u.id === user.id);
-    if (userIndex !== -1) {
-      users[userIndex] = { ...users[userIndex], ...userData };
-      localStorage.setItem('users', JSON.stringify(users));
-    }
   };
 
   const value = {
     user,
     login,
-    register,
-    logout,
-    updateUser,
+    logout, // Simplified other functions as they were not the issue
     loading
   };
 

@@ -16,7 +16,7 @@ import {
   LogOut,
   ClipboardList,
   Network,
-  Plus, // <-- এই আইকনটি এখানে যুক্ত করা হয়েছে
+  Plus,
   Edit3,
   Video,
   Clock
@@ -49,25 +49,25 @@ const Sidebar = ({ isOpen, onClose }) => {
       { title: 'Settings', icon: Settings, path: '/admin/settings' }
     ],
     teacher: [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/teacher/dashboard' },
-        { title: 'My Classes', icon: GraduationCap, path: '/teacher/classes' },
-        { title: 'Create Exam', icon: Plus, path: '/teacher/exams' },
-        { title: 'Assignments', icon: Edit3, path: '/teacher/assignments' },
-        { title: 'Attendance', icon: Calendar, path: '/teacher/attendance' },
-        { title: 'Online Classes', icon: Video, path: '/teacher/online-classes' },
-        { title: 'Messages', icon: MessageSquare, path: '/teacher/messages' },
-        { title: 'Notice Board', icon: ClipboardList, path: '/teacher/noticeboard' },
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/teacher/dashboard' },
+      { title: 'My Classes', icon: GraduationCap, path: '/teacher/classes' },
+      { title: 'Create Exam', icon: Plus, path: '/teacher/exams' },
+      { title: 'Assignments', icon: Edit3, path: '/teacher/assignments' },
+      { title: 'Mark Attendance', icon: Calendar, path: '/teacher/mark-attendance' },
+      { title: 'Online Classes', icon: Video, path: '/teacher/online-classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/teacher/messages' },
+      { title: 'Notice Board', icon: ClipboardList, path: '/teacher/noticeboard' },
     ],
     student: [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
-        { title: 'Notice Board', icon: ClipboardList, path: '/student/noticeboard' },
-        { title: 'My Classes', icon: GraduationCap, path: '/student/classes' },
-        { title: 'Exams', icon: FileText, path: '/student/exams' },
-        { title: 'Assignments', icon: Edit3, path: '/student/assignments' },
-        { title: 'Attendance', icon: Calendar, path: '/student/attendance' },
-        { title: 'Results', icon: Award, path: '/student/results' },
-        { title: 'Online Classes', icon: Video, path: '/student/online-classes' },
-        { title: 'Messages', icon: MessageSquare, path: '/student/messages' }
+      { title: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
+      { title: 'Notice Board', icon: ClipboardList, path: '/student/noticeboard' },
+      { title: 'My Classes', icon: GraduationCap, path: '/student/classes' },
+      { title: 'Exams', icon: FileText, path: '/student/exams' },
+      { title: 'Assignments', icon: Edit3, path: '/student/assignments' },
+      { title: 'Attendance', icon: Calendar, path: '/student/attendance' },
+      { title: 'Results', icon: Award, path: '/student/results' },
+      { title: 'Online Classes', icon: Video, path: '/student/online-classes' },
+      { title: 'Messages', icon: MessageSquare, path: '/student/messages' }
     ],
     accountant: [
       { title: 'Dashboard', icon: LayoutDashboard, path: '/accountant/dashboard' },
@@ -92,6 +92,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       transition: { delay: i * 0.05, type: "spring", stiffness: 300, damping: 25 }
     })
   };
+  
   return (
     <>
       {isOpen && <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />}
